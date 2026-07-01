@@ -210,7 +210,7 @@ export function ProductDashboard() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const resolvedApiUrl = apiUrl.trim() || "https://google-solutions-challenge-1.onrender.com/predict";
+      const resolvedApiUrl = apiUrl.trim() || "http://localhost:8000/predict";
 
       const uploadRes = await fetch("/api/upload", {
         method: "POST",
@@ -413,8 +413,7 @@ export function ProductDashboard() {
                   className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
                 <p className="mt-2 text-xs text-slate-500">
-                  Leave empty to use the default demo model:{" "}
-                  <span className="font-mono text-slate-700">google-solutions-challenge-1.onrender.com/predict</span>
+                  Leave this empty to use the backend default model endpoint.
                 </p>
               </div>
 
