@@ -108,7 +108,7 @@ export function ProductDashboard() {
   const [monitoringMessage, setMonitoringMessage] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [deletingJobId, setDeleteJobId] = useState<number | null>(null);
-  
+
   // Fetch jobs from backend API with polling
   const { data: jobsData, refetch: refetchJobs, isLoading: isRefreshing } = usePolling<{
     success?: boolean;
@@ -138,7 +138,7 @@ export function ProductDashboard() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const buttonLabel = monitoringEnabled ? "Enable Continuous Monitoring" : "Analyze Bias";
+  const buttonLabel = monitoringEnabled ? "Enable Monitoring" : "Analyze Bias";
 
   const handleDeleteMonitoringSetup = async (job: MonitoringConfig) => {
     const confirmed = window.confirm("Are you sure you want to delete this monitoring setup?");
@@ -244,7 +244,7 @@ export function ProductDashboard() {
 
       setAnalysisResult(analyzeData);
       setHasAnalyzed(true);
-      
+
       // Log SPD values to browser console for testing
       console.log("%c[BIAS ANALYSIS RESULTS]", "color: #2563EB; font-weight: bold; font-size: 14px;");
       console.log("%cProtected Column: %s", "color: #64748B;", analyzeData.detected_protected);
@@ -291,7 +291,7 @@ export function ProductDashboard() {
       console.error("%c[ERROR] Bias Analysis Failed", "color: #EF4444; font-weight: bold; font-size: 14px;");
       console.error("%cError Details: %s", "color: #64748B;", errorMsg);
       console.error(submitError);
-      
+
       if (submitError instanceof Error && submitError.message === "Failed to fetch") {
         setError("Failed to reach the backend. Make sure the Next.js app and Flask API are both running.");
       } else {
@@ -304,27 +304,27 @@ export function ProductDashboard() {
 
   const analysisMetrics = analysisResult
     ? [
-        {
-          label: "Statistical Parity Difference",
-          value: analysisResult.metrics.statistical_parity_difference,
-        },
-        {
-          label: "Disparate Impact",
-          value: analysisResult.metrics.disparate_impact,
-        },
-        {
-          label: "Mean Difference",
-          value: analysisResult.metrics.mean_difference,
-        },
-        {
-          label: "Equal Opportunity Difference",
-          value: analysisResult.metrics.equal_opportunity_difference ?? null,
-        },
-        {
-          label: "Average Odds Difference",
-          value: analysisResult.metrics.average_odds_difference ?? null,
-        },
-      ]
+      {
+        label: "Statistical Parity Difference",
+        value: analysisResult.metrics.statistical_parity_difference,
+      },
+      {
+        label: "Disparate Impact",
+        value: analysisResult.metrics.disparate_impact,
+      },
+      {
+        label: "Mean Difference",
+        value: analysisResult.metrics.mean_difference,
+      },
+      {
+        label: "Equal Opportunity Difference",
+        value: analysisResult.metrics.equal_opportunity_difference ?? null,
+      },
+      {
+        label: "Average Odds Difference",
+        value: analysisResult.metrics.average_odds_difference ?? null,
+      },
+    ]
     : [];
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -347,7 +347,7 @@ export function ProductDashboard() {
           </div>
           <h1 className="mt-5 text-4xl md:text-5xl font-serif font-bold text-slate-900">Bias Analyzer</h1>
           <p className="mt-4 text-slate-600 text-base md:text-lg max-w-2xl mx-auto">
-            Run a one-time fairness check or turn on continuous monitoring for a dataset and model API.
+            Run a one-time fairness check or turn on monitoring for a dataset and model API.
           </p>
           <div className="mt-6 flex justify-center">
             <Link
@@ -372,7 +372,7 @@ export function ProductDashboard() {
                   onChange={(event) => setMonitoringEnabled(event.target.checked)}
                   className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
                 />
-                Enable continuous monitoring
+                Enable monitoring
               </label>
 
               {monitoringEnabled ? (
@@ -472,48 +472,48 @@ export function ProductDashboard() {
 
               {hasAnalyzed ? (
                 analysisResult ? (
-                <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/60 p-5 md:p-6">
-                  <div className="flex items-center gap-2">
-                    <Info className="h-4 w-4 text-slate-600" />
-                    <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900">Analysis Results</h2>
-                  </div>
-
-                  <div className="grid gap-3">
-                    <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Protected Attribute</div>
-                      <div className="mt-1 text-sm font-medium text-slate-900">{analysisResult.detected_protected}</div>
+                  <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/60 p-5 md:p-6">
+                    <div className="flex items-center gap-2">
+                      <Info className="h-4 w-4 text-slate-600" />
+                      <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900">Analysis Results</h2>
                     </div>
-                    <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Target Variable</div>
-                      <div className="mt-1 text-sm font-medium text-slate-900">{analysisResult.detected_target}</div>
-                    </div>
-                  </div>
 
-                  <div className="grid gap-3 md:grid-cols-2">
-                    {analysisMetrics.map((metric) => (
-                      <div key={metric.label} className="rounded-lg border border-slate-200 bg-white px-4 py-3">
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{metric.label}</div>
-                        <div className="mt-1 text-sm font-medium text-slate-900">
-                          {metric.value === null || metric.value === undefined ? "Not computable" : metric.value}
-                        </div>
+                    <div className="grid gap-3">
+                      <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Protected Attribute</div>
+                        <div className="mt-1 text-sm font-medium text-slate-900">{analysisResult.detected_protected}</div>
                       </div>
-                    ))}
-                  </div>
+                      <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Target Variable</div>
+                        <div className="mt-1 text-sm font-medium text-slate-900">{analysisResult.detected_target}</div>
+                      </div>
+                    </div>
 
-                  <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Verdict</div>
-                    <div className="mt-1 text-sm font-semibold text-slate-900">
-                      {analysisResult.bias_comparison?.verdict ?? (analysisResult.severity === "HIGH" ? "High bias" : "Low bias")}
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {analysisMetrics.map((metric) => (
+                        <div key={metric.label} className="rounded-lg border border-slate-200 bg-white px-4 py-3">
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{metric.label}</div>
+                          <div className="mt-1 text-sm font-medium text-slate-900">
+                            {metric.value === null || metric.value === undefined ? "Not computable" : metric.value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Verdict</div>
+                      <div className="mt-1 text-sm font-semibold text-slate-900">
+                        {analysisResult.bias_comparison?.verdict ?? (analysisResult.severity === "HIGH" ? "High bias" : "Low bias")}
+                      </div>
+                    </div>
+
+                    <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Short Explanation</div>
+                      <div className="mt-1 text-sm leading-relaxed text-slate-700">
+                        {analysisResult.insight ?? "The analysis completed successfully."}
+                      </div>
                     </div>
                   </div>
-
-                  <div className="rounded-lg border border-slate-200 bg-white px-4 py-3">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Short Explanation</div>
-                    <div className="mt-1 text-sm leading-relaxed text-slate-700">
-                      {analysisResult.insight ?? "The analysis completed successfully."}
-                    </div>
-                  </div>
-                </div>
                 ) : (
                   <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 px-5 py-6 text-sm text-slate-500">
                     Run analysis to view results.
